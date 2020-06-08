@@ -1,75 +1,80 @@
-function Add (String){
-  if (String === ''){
-    return 0;
-  }
-  const delimiter = getDelimiter(String)
-  const formattedInput = formatInput(String)
- 
-function formatInput(input){
-  const delimiterRegExp = /^(\/\/.*\n)/
-  const matches = delimiterRegExp.exec(input)
-  if(matches && matches.length > 0){
-    return input.replace(delimiterRegExp,'')
-  }
-  return input
-}
+// Helper functions
+function validateInput(string){
+  const asciiCode = string[string.length-1].charCodeAt(0)
+  if((string.search(/[//]/) != 0 && string.search(/[//]/) != -1) 
+  || asciiCode < 48 || asciiCode > 57){
+      throw 'ERROR: invalid input';
+  } 
 
-function getDelimiter(input) {
-  const delimiters = []
-  const multipleDelimiterRegexp = /(?:^\/\/)?\[([^\[\]]+)\]\n?/g
-  let matches = multipleDelimiterRegexp.exec(input)
-  while(matches !== null){
-    delimiters.push(matches[1])
-    matches = multipleDelimiterRegexp.exec(input)
-  }
-  if(delimiters.length > 0){
-    return new RegExp('['+delimiters.join('')+']')
-  }
-  matches = /^\/\/(.*)\n/.exec(input)
-  if(matches && matches[1]){
-    return matches[1]
-  }
-  return /[\n,]/ 
-}
-
-function getNumbers(string, delimiter){
-  return string.split(delimiter)
-    .filter(n => n !== '')
-    .map(n => parseInt(n))
 }
 
 function calculateSum(numbers){
-  const negatives = []
-  const finalSum = numbers.reduce((sum, n) =>{
-    if(n > 1000){
-      return 0
+  let total = 0;
+  for(let pos = 0; pos < numbers.length; pos++){
+    let n = Number(numbers[pos]);
+    if(n < 1000){
+      total = total + n;
     }
-    if(n < 0){
-      negatives.push(n)
-      return 0
-    }
-    return sum + n
-  },0)
-  if(negatives.length > 0){
-    throw new Error('Negatives not allowed: '+negatives.join(','))
   }
-  return finalSum
-}
-return calculateSum(getNumbers(formattedInput, delimiter))   
+  return total;
 }
 
+function checkNegatives(str){
+  let neg = /-\d+/g;
+  if(str.match(neg)){
+    throw "ERROR: negatives not allowed " + str.match(neg);
+  }
+}
+//end of helper functions
 
-module.exports = {Add};
+function add (string){
+  if (string === ''){
+    return 0;
+  }
+  validateInput(string);
+  checkNegatives(string);
 
-// console.log(Add('1,1')) 
-// console.log(Add('1,2,3')) 
-// console.log(Add('1\n2,3')) 
-// console.log(Add('//;\n1;2;3')) 
-// console.log(Add('1001,2'))
-// console.log(Add('//[**]\n1**2**3')) 
-// console.log(Add('//[*][%]\n1*2%3')) 
-// console.log(Add('//[..][%%]\n1..2%%3')) 
+  let pattern = /-?\d+/g; //pattern for extracting all numbers
+  let numbers = string.match(pattern);
+  if (numbers.length == 1 && Number(numbers[0]) > 0){
+    return Number(numbers[0]);
+  }
+  if(string.search(/[//]/) == -1){
+    return calculateSum(numbers);
+  }
 
+  let delim  = string.slice(0, string.search((/[\n]/))); //Get delimiter from string
+  let delNum = delim.match(pattern);
+  if(delNum == null){
+    return calculateSum(numbers);
+  }
+  delNum = delNum[0];
+  let nums = [];
+  for(let pos = 0; pos < numbers.length; pos++){
+    if(numbers[pos] != delNum){
+      let numberSplit = numbers[pos].split(delNum);
+      for(let i = 0; i < numberSplit.length; i++){
+        nums.push(numberSplit[i]);
+      }
+    }
+  }
+  return calculateSum(nums);
+}
+
+
+
+module.exports = {add};
+
+// console.log(add('1,1')) 
+// console.log(add('1,2,3')) 
+// console.log(add('1\n2,3')) 
+// console.log(add('//;\n1;2;3')) 
+// console.log(add('1001,2'))
+// console.log(add('//[**]\n1**2**3')) 
+// console.log(add('//[*][%]\n1*2%3')) 
+// console.log(add('//[..][%%]\n1..2%%3')) 
+// console.log(add("//;\n1000;1;2;"))
+// console.log(add("-1,-2,3,4"));
 
   
 
