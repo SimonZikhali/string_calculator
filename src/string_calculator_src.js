@@ -9,6 +9,7 @@ function validateInput(string){
 }
 
 function calculateSum(numbers){
+  //sum all numbers below 1000
   let total = 0;
   for(let pos = 0; pos < numbers.length; pos++){
     let n = Number(numbers[pos]);
