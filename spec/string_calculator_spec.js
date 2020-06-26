@@ -47,6 +47,10 @@ describe('add', function () {
     expect(add("//5\n15253")).toEqual(6);
   });
 
+  it('Should support different delimeters',function(){
+    expect(add("//[abc][777][:(]\n1abc27773:(1")).toEqual(7);
+  });
+
   it('should check if inputs valid',function(){
     expect(function(){
      add("//;\n1000;1;2;")}).toThrow("ERROR: invalid input")
