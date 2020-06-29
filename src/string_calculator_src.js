@@ -1,11 +1,9 @@
-// Helper functions
 function validateInput(string){
   const asciiCode = string[string.length-1].charCodeAt(0)
   if((string.search(/[//]/) != 0 && string.search(/[//]/) != -1) 
   || asciiCode < 48 || asciiCode > 57){
       throw 'ERROR: invalid input';
   } 
-
 }
 
 function calculateSum(numbers){
@@ -25,7 +23,6 @@ function checkNegatives(str){
     throw "ERROR: negatives not allowed " + str.match(neg);
   }
 }
-//end of helper functions
 
 function add (string){
   if (string === ''){
@@ -34,7 +31,7 @@ function add (string){
   validateInput(string);
   checkNegatives(string);
 
-  let pattern = /-?\d+/g; //pattern for extracting all numbers
+  let pattern = /-?\d+/g; 
   let numbers = string.match(pattern);
   if (numbers.length == 1 && Number(numbers[0]) > 0){
     return Number(numbers[0]);
@@ -43,7 +40,7 @@ function add (string){
     return calculateSum(numbers);
   }
 
-  let delim  = string.slice(0, string.search((/[\n]/))); //Get delimiter from string
+  let delim  = string.slice(0, string.search((/[\n]/))); 
   let delNum = delim.match(pattern);
   if(delNum == null){
     return calculateSum(numbers);
@@ -61,20 +58,9 @@ function add (string){
   return calculateSum(nums);
 }
 
-
-
 module.exports = {add};
 
-// console.log(add('1,1')) 
-// console.log(add('1,2,3')) 
-// console.log(add('1\n2,3')) 
-// console.log(add('//;\n1;2;3')) 
-// console.log(add('1001,2'))
-// console.log(add('//[**]\n1**2**3')) 
-// console.log(add('//[*][%]\n1*2%3')) 
-// console.log(add('//[..][%%]\n1..2%%3')) 
-// console.log(add("//;\n1000;1;2;"))
-// console.log(add("-1,-2,3,4"));
+
 
   
 

@@ -36,15 +36,15 @@ describe('add', function () {
   });
 
   it('should support multiple length delimiter',function () {
-    expect(add("//[**]\n1**2**3")).toEqual(6);
+    expect(add("//[:D][%]\n1:D2%3")).toEqual(6);
   });
 
   it('should support multiple delimiters',function () {
-    expect(add("//[*][?]\n1*2?3")).toEqual(6);
+    expect(add("//[***][%%%]\n1***2%%%3")).toEqual(6);
   });
 
   it('should support number as a delimiter',function () {
-    expect(add("//5\n15253")).toEqual(6);
+    expect(add("//[(-_-')][%]\n1(-_-')2%3")).toEqual(6);
   });
 
   it('Should support different delimeters',function(){
